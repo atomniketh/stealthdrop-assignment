@@ -11,21 +11,38 @@ fn main(
   polynomial_commitment: Field,
   nullifier: pub [u8; 32],
 ) {
-  
+    std::println(pub_key);
+    std::println(signature);
+    std::println(hashed_message);
+    std::println(polynomial);
+    std::println(polynomial_commitment);
+    std::println(nullifier);
+
+
   // 1. Recover the signer's address from signature, 
   // hashed message and public key.
+
+
+
+  // let address = ecrecover::ecrecover(pub_key_x, pub_key_y, signature, hashed_message);
+  //std::println(address);
+
+  //address // address is represented as `Field`, but is constrained to be within 160 bits
+
 
   // 2. Check whether the address is included in the polynomial. 
   // To do this, you will have to make sure the evaluation of polynomial
   // at address is 0.
 
-  // 3. Check the given nullifier is a valid hash of signature. 
-  // We are using blake hash for hashing signature. 
-  // The hash is already implemented and can be accessed via std::hash::blake2s
+//  evaluate_polynomial
 
+  // 3. Check the given nullifier is a valid hash of signature. 
+    let sig_hash = std::hash::blake2s(signature);
+    std::println(sig_hash);
+    assert(nullifier == sig_hash);
 }
 
-fn evaluate_polynomial(polynomial: [Field; CANDIDATES + 1], x: Field) -> Field {
+// fn evaluate_polynomial(polynomial: [Field; CANDIDATES + 1], x: Field) -> Field {
   // Write logic to evaluate polynomial here
 
   // 1. Create a polynomial with the hash of values to include
@@ -39,7 +56,7 @@ fn evaluate_polynomial(polynomial: [Field; CANDIDATES + 1], x: Field) -> Field {
 
   // 4. Check that the hash of the polynomial is the same as the public polynomial hash provided
 
-}
+// }
 
 #[test]
 fn test_main() {
