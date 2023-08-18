@@ -13,38 +13,40 @@ fn main(
   polynomial_commitment: Field,
   nullifier: pub [u8; 32],
 ) {
-  // 1. Recover the signer's address from signature, hashed message and public key.
+// 1. Recover the signer's address from signature, hashed message and public key.
   let address = ecrecover::ecrecover(pub_key_x, pub_key_y, signature, hashed_message);
-  // std::println(address);
+  std::println(address);
+// 2. Check whether the address is included in the polynomial. 
+// To do this, you will have to make sure the evaluation of polynomial
+// at address is 0.
 
-  // 2. Check whether the address is included in the polynomial. 
-  // To do this, you will have to make sure the evaluation of polynomial
-  // at address is 0.
   let addr_included = evaluate_polynomial(polynomial, polynomial_commitment);
   // assert(addr_included == 0);
-  std::println(addr_included);
 
-  // 3. Check the given nullifier is a valid hash of signature. 
+// 3. Check the given nullifier is a valid hash of signature. 
     let sig_hash = std::hash::blake2s(signature);
     assert(nullifier == sig_hash);
 }
 
 fn evaluate_polynomial(polynomial: [Field; CANDIDATES + 1], x: Field) -> Field {
-  // 1. Create a polynomial with the hash of values to include
+// 1. Create a polynomial with the hash of values to include
+
+
+// 2. Hash the polynomial. This hash can be a public input to the circuit
   let poly_hash = std::hash::pedersen(polynomial)[0];
 
-  // 2. Hash the polynomial. This hash can be a public input to the circuit
-    let hash_of_poly = std::hash::pedersen([polynomial[CANDIDATES]])[0];
-    // std::println(hash_of_poly);
 
-  // 3. In the circuit, check that the user knows a secret value which hashes 
-    // to an included value in polynomial. 
-    // This can be done by hashing the input value and asserting the evaluation 
-    //of the polynomial at that hashed value to be zero
+// 3. In the circuit, check that the user knows a secret value which hashes 
+// to an included value in polynomial. 
+// This can be done by hashing the input value and asserting the evaluation 
+//of the polynomial at that hashed value to be zero
 
-  // is the secret value the recovered address?
+  // Q: is the secret value the recovered address?
+    //   let root = std::merkle::check_membership(root, note_commitment[0], index, hash_path);
+    // constrain root == root;
+    // std::println(root);
 
-  // 4. Check that the hash of the polynomial is the same as the public polynomial hash provided
+// 4. Check that the hash of the polynomial is the same as the public polynomial hash provided
   assert(poly_hash == x);
 
 poly_hash
