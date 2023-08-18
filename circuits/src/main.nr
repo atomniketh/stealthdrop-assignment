@@ -11,11 +11,34 @@ fn main(
   polynomial_commitment: Field,
   nullifier: pub [u8; 32],
 ) {
-  // Write your main logic here
+  
+  // 1. Recover the signer's address from signature, 
+  // hashed message and public key.
+
+  // 2. Check whether the address is included in the polynomial. 
+  // To do this, you will have to make sure the evaluation of polynomial
+  // at address is 0.
+
+  // 3. Check the given nullifier is a valid hash of signature. 
+  // We are using blake hash for hashing signature. 
+  // The hash is already implemented and can be accessed via std::hash::blake2s
+
 }
 
 fn evaluate_polynomial(polynomial: [Field; CANDIDATES + 1], x: Field) -> Field {
   // Write logic to evaluate polynomial here
+
+  // 1. Create a polynomial with the hash of values to include
+
+  // 2. Hash the polynomial. This hash can be a public input to the circuit
+
+  // 3. In the circuit, check that the user knows a secret value which hashes 
+    // to an included value in polynomial. This can be done by hashing the input 
+    // value and asserting the evaluation of the polynomial at that hashed value 
+    // to be zero
+
+  // 4. Check that the hash of the polynomial is the same as the public polynomial hash provided
+
 }
 
 #[test]
