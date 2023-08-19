@@ -14,18 +14,22 @@ fn main(
   nullifier: pub [u8; 32],
 ) {
 // 1. Recover the signer's address from signature, hashed message and public key.
+
   let address = ecrecover::ecrecover(pub_key_x, pub_key_y, signature, hashed_message);
   std::println(address);
+
 // 2. Check whether the address is included in the polynomial. 
 // To do this, you will have to make sure the evaluation of polynomial
 // at address is 0.
 
-  let addr_included = evaluate_polynomial(polynomial, polynomial_commitment);
+  let addr_included = evaluate_polynomial(polynomial, address);
   // assert(addr_included == 0);
 
 // 3. Check the given nullifier is a valid hash of signature. 
-    let sig_hash = std::hash::blake2s(signature);
-    assert(nullifier == sig_hash);
+    
+  let sig_hash = std::hash::blake2s(signature);
+  assert(nullifier == sig_hash);
+
 }
 
 fn evaluate_polynomial(polynomial: [Field; CANDIDATES + 1], x: Field) -> Field {
