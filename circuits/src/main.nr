@@ -2,7 +2,6 @@ global CANDIDATES: Field = 2;
 
 use dep::std;
 use dep::ecrecover;
-use dep::std::collections::vec;
 
 fn main(
   pub_key: [u8; 64],
