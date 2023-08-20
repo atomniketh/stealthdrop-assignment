@@ -1,7 +1,9 @@
 global CANDIDATES: Field = 2;
 
+use dep::std::slice;
 use dep::std;
 use dep::ecrecover;
+use dep::u2b;
 
 fn main(
   pub_key: [u8; 64],
@@ -14,6 +16,10 @@ fn main(
   nullifier: pub [u8; 32],
 ) {
 // 1. Recover the signer's address from signature, hashed message and public key.
+   let mut new_slice: [Field] = [];
+     new_slice = new_slice.push_front(32);
+    let (remove_slice, removed_elem) = new_slice.remove(32);
+std::println(removed_elem);
 
   let address = ecrecover::ecrecover(pub_key_x, pub_key_y, signature, hashed_message);
   std::println(address);
@@ -50,6 +56,8 @@ fn evaluate_polynomial(polynomial: [Field; CANDIDATES + 1], x: Field) -> Field {
     // constrain root == root;
     // std::println(root);
 
+   // let note_commitment = std::hash::pedersen([pubkey_x, pubkey_y]);
+   // assert(note_root == std::merkle::compute_merkle_root(note_commitment[0], address, note_hash_path));
 // 4. Check that the hash of the polynomial is the same as the public polynomial hash provided
   assert(poly_hash == x);
 

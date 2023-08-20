@@ -4,3 +4,4 @@ compiler_version = "0.7.1"
 
 [dependencies]
 ecrecover = { tag = "v0.8.0", git = "https://github.com/colinnielsen/ecrecover-noir" }
+u2b = {tag = "v0.3.0-nightly", git="https://github.com/codingnirvana/noir-u2b" }

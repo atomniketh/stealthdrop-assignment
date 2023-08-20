@@ -31,6 +31,10 @@
     "@noir-lang/acvm_js": "git+https://github.com/noir-lang/acvm-simulator-wasm.git",
     "@types/mocha": "^10.0.1",
     "fflate": "^0.8.0",
-    "toml": "^3.0.0"
+    "toml": "^3.0.0",
+    "@noir-lang/aztec_backend": "^0.1.0-0c3b2f2",
+    "@noir-lang/barretenberg": "github:noir-lang/barretenberg#39a1547875f941ef6640217a42d8f34972425c97",
+    "@noir-lang/noir_wasm": "^0.3.2-fa0e9cff",
+    "hardhat-noir": "^0.2.1"
   }
 }
