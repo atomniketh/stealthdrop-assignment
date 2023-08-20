@@ -16,7 +16,7 @@ fn main(
   // 1. Recover the signer's address from signature, hashed message and public key.
 
   let address = ecrecover::ecrecover(pub_key_x, pub_key_y, signature, hashed_message);
-
+std::println(address);
   // let mut pubkey_x1 = [0]; 
   // for i in 0..31 {
   //   pubkey_x1 += pub_key[i];
