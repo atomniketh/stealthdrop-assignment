@@ -11,76 +11,36 @@ fn main(
   polynomial_commitment: Field,
   nullifier: pub [u8; 32],
 ) {
-//   // 1. Recover the signer's address from signature, hashed message and public key.
-
-//   let address = ecrecover::ecrecover(pub_key_x, pub_key_y, signature, hashed_message);
-// std::println(address);
-//   // let mut pubkey_x1 = [0]; 
-//   // for i in 0..31 {
-//   //   pubkey_x1 += pub_key[i];
-//   // }
-
-//   // 2. Check whether the address is included in the polynomial. 
-//   // To do this, you will have to make sure the evaluation of polynomial
-//   // at address is 0.
-
-//   let addr_included = evaluate_polynomial(polynomial, polynomial_commitment);
-//   // assert(addr_included == 0);
-
-//   // 3. Check the given nullifier is a valid hash of signature. 
-    
-//   let sig_hash = std::hash::blake2s(signature);
-//   assert(nullifier == sig_hash);
-
+// 1. Recover the signer's address from signature, hashed message and public key.
   let mut pub_key_x: [u8; 32] = [0; 32];
-    let mut pub_key_y: [u8; 32] = [0; 32];
+  let mut pub_key_y: [u8; 32] = [0; 32];
 
     for i in 0..32 {
       pub_key_x[i] = pub_key[i];
       pub_key_y[i] = pub_key[i+32];
     }
+  
+  let rec_address: Field = ecrecover::ecrecover(pub_key_x, pub_key_y, signature, hashed_message);
+    // std::println(rec_address);
 
-    let address: Field = ecrecover::ecrecover(pub_key_x, pub_key_y, signature, hashed_message);
+//  2. Check whether the address is included in the polynomial. 
+    assert(evaluate_polynomial(polynomial, rec_address) == 0);
 
-    let evaluation = evaluate_polynomial(polynomial, address);
-    assert(evaluation == 0);
-
+// 3. Create a polynomial with the hash of values to include
     let check_polynomial = std::hash::pedersen(polynomial)[0];
     assert(polynomial_commitment == check_polynomial);
+    // std::println(check_polynomial);
 
-    let check_signature = std::hash::blake2s(signature);
-    assert(nullifier == check_signature);
-
+// 4. Check the given nullifier is a valid hash of signature. 
+    let sig_hash = std::hash::blake2s(signature);
+    assert(nullifier == sig_hash);
+    // std::println(sig_hash);
 }
 
 fn evaluate_polynomial(polynomial: [Field; CANDIDATES + 1], x: Field) -> Field {
-
-//   // 1. Create a polynomial with the hash of values to include
-
-//   // 2. Hash the polynomial. This hash can be a public input to the circuit
-//   let poly_hash = std::hash::pedersen(polynomial)[0];
-
-//   // 3. In the circuit, check that the user knows a secret value which hashes 
-//   // to an included value in polynomial. 
-//   // This can be done by hashing the input value and asserting the evaluation 
-//   //of the polynomial at that hashed value to be zero
-
-
-//   // 4. Check that the hash of the polynomial is the same as the public polynomial hash provided
-//   assert(poly_hash == polynomial_commitment);
-
-// poly_hash
-
-  let mut mult = 1;
-  let mut evaluation = 0;
-
-  for i in 0..CANDIDATES + 1 {
-    evaluation = mult * polynomial[i] + evaluation;
-    mult = mult * x;
-  }
-
-  evaluation
-
+  let sec_val_hash = polynomial[0] + polynomial[1] * x + polynomial[2] * x * x;
+  // std::println(sec_val_hash);
+  sec_val_hash
 }
 
 #[test]
@@ -100,4 +60,3 @@ fn test_main() {
 
   main(pub_key, signature, hashed_message, polynomial, polynomial_commitment, nullifier);
 }
-
